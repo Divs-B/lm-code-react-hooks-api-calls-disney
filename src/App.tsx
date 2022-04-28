@@ -6,6 +6,9 @@ import Navigation from "./components/navigation";
 import { DisneyCharacter } from "./disney_character";
 import axios from "axios";
 
+export const FavouritesContext = React.createContext<number[]>([]);
+export const FavouritesUpdateContext = React.createContext(([]) => {});
+
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [characters, setCharacters] = useState<Array<DisneyCharacter>>([]);
@@ -22,19 +25,21 @@ const App: React.FC = () => {
       "http://api.disneyapi.dev/characters?page=" + pageNumber
     );
     setCharacters(apiResponse.data.data);
-    console.log("-------->>" + characters);
   };
 
   return (
-    <div className="page">
-      <Header currentPage={currentPage} />
-      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      <CharacterContainer
-        characters={characters}
-        characterFavourites={characterFavourites}
-        updateFavourites={setCharacterFavourites}
-      />
-    </div>
+    <FavouritesContext.Provider value={characterFavourites}>
+      <FavouritesUpdateContext.Provider value={setCharacterFavourites}>
+        <div className="page">
+          <Header currentPage={currentPage} />
+          <Navigation
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+          <CharacterContainer characters={characters} />
+        </div>
+      </FavouritesUpdateContext.Provider>
+    </FavouritesContext.Provider>
   );
 };
 

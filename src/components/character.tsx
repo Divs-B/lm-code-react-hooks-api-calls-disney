@@ -1,23 +1,23 @@
 import { DisneyCharacter } from "../disney_character";
+import React, { useContext } from "react";
+import { FavouritesContext, FavouritesUpdateContext } from "../App";
 
 interface CharacterProps {
   character: DisneyCharacter;
-  characterFavourites: Array<number>;
-  updateFavourites: (favourites: Array<number>) => void;
 }
-const Character: React.FC<CharacterProps> = ({
-  character,
-  characterFavourites,
-  updateFavourites,
-}) => {
+
+const Character: React.FC<CharacterProps> = ({ character }) => {
+  const characterFavourites = useContext(FavouritesContext);
+  const characterUpdateFavourites = useContext(FavouritesUpdateContext);
+
   function toggleFavouriteForCharacter(characterId: number) {
     if (!characterFavourites.includes(characterId)) {
-      updateFavourites([...characterFavourites, characterId]);
+      characterUpdateFavourites([...characterFavourites, characterId]);
     } else {
       const updatedFavourites = characterFavourites.filter(
         (id) => id !== characterId
       );
-      updateFavourites(updatedFavourites);
+      characterUpdateFavourites(updatedFavourites);
     }
   }
 
