@@ -10,12 +10,20 @@ const Character: React.FC<CharacterProps> = ({ character }) => {
   const characterFavourites = useContext(FavouritesContext);
   const characterUpdateFavourites = useContext(FavouritesUpdateContext);
 
-  function toggleFavouriteForCharacter(characterId: number) {
-    if (!characterFavourites.includes(characterId)) {
-      characterUpdateFavourites([...characterFavourites, characterId]);
+  function checkIfFavAlready(character: DisneyCharacter): boolean {
+    const isCharcterFavPresent = characterFavourites.filter(
+      (chr) => chr._id === character._id
+    );
+    if (isCharcterFavPresent.length > 0) return true;
+    else return false;
+  }
+
+  function toggleFavouriteForCharacter(character: DisneyCharacter) {
+    if (!checkIfFavAlready(character)) {
+      characterUpdateFavourites([...characterFavourites, character]);
     } else {
       const updatedFavourites = characterFavourites.filter(
-        (id) => id !== characterId
+        (chr) => chr._id !== character._id
       );
       characterUpdateFavourites(updatedFavourites);
     }
@@ -27,11 +35,9 @@ const Character: React.FC<CharacterProps> = ({ character }) => {
 
       <div
         className="character-item__actions"
-        onClick={() => toggleFavouriteForCharacter(character._id)}
+        onClick={() => toggleFavouriteForCharacter(character)}
       >
-        {characterFavourites.includes(character._id)
-          ? "Add to Favourites"
-          : "Favourited"}
+        {!checkIfFavAlready(character) ? "Add to Favourites" : "Favourited"}
       </div>
 
       <img

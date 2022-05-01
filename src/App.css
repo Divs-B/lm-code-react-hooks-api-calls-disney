@@ -44,6 +44,11 @@
   min-width: 50px;
 }
 
+.buttoncenter {  
+  margin: 0 auto;
+  display: block;
+}
+
 .character-container {
   max-width: 90%;
   margin: 0 auto;
